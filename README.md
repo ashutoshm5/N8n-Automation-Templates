@@ -1,120 +1,132 @@
 # n8n Automation Templates Library
 
-[![n8n](https://img.shields.io/badge/Platform-n8n%20Workflow%20Automation-EA4B71?logo=n8n)](https://n8n.io/)
-[![Self-Hosted](https://img.shields.io/badge/Deployment-Docker%20%7C%20Self--Hosted-2496ED?logo=docker)](https://www.docker.com/)
-[![Zero Embedded Secrets](https://img.shields.io/badge/Security-Zero%20Embedded%20Secrets-brightgreen)](SECURITY.md)
-[![Modular Architecture](https://img.shields.io/badge/Design-Fully%20Modular%20Templates-blueviolet)](#-template-catalog)
+[![n8n Platform](https://img.shields.io/badge/Platform-n8n%20Workflow%20Automation-EA4B71?logo=n8n)](https://n8n.io/)
+[![Deployment](https://img.shields.io/badge/Deployment-Docker%20%7C%20Self--Hosted-2496ED?logo=docker)](https://www.docker.com/)
+[![Security Standard](https://img.shields.io/badge/Security-Zero%20Embedded%20Secrets-brightgreen)](SECURITY.md)
+[![License Notice](https://img.shields.io/badge/License-Review%20Required-yellow)](LICENSE)
+[![Templates Status](https://img.shields.io/badge/Templates-Production%20Ready-blueviolet)](#-template-catalog)
 
-Welcome to the **n8n Automation Templates Library** — a curated, open-source collection of production-grade, battle-tested automation workflows designed for self-hosted [n8n](https://n8n.io/) environments.
+A curated collection of production-grade, battle-tested automation workflows for self-hosted [n8n](https://n8n.io/). 
 
-Whether you are automating social media content pipelines, deploying autonomous AI agents, orchestrating DevOps alerts, syncing CRM leads, or processing multi-source data, this repository provides **ready-to-import blueprints** complete with exhaustive documentation, configuration steps, and security hardening.
-
----
-
-## 📖 What is n8n?
-
-[n8n](https://n8n.io/) is an extensible, open-source workflow automation platform. Often described as a developer-friendly, self-hostable alternative to Zapier or Make, n8n lets you connect any application with an API, manipulate data using native JavaScript/Python code nodes, and build complex, branching business logic without vendor lock-in or recurring per-task cloud fees.
+Each template is **modular**, **fully documented**, and **decoupled from secrets**—ready to import and run in minutes.
 
 ---
 
-## ⚡ What are n8n Templates?
+## ⚡ Quick Navigation
 
-An **n8n template** is a pre-built, serialized JSON blueprint of an automation pipeline. When imported into an n8n canvas, it instantly recreates the full operational workflow:
-* Node arrangements and topological execution connections.
-* Parameter configurations, expressions, and routing logic.
-* Data transformation scripts and filtering rules.
-* Integration endpoints for external webhooks, APIs, and AI models.
+| Section | Description |
+| :--- | :--- |
+| **[📂 Template Catalog](#-template-catalog)** | Browse available and upcoming automation blueprints |
+| **[🚀 4-Step Quickstart](#-how-to-use-any-template)** | How to import and run any template on your instance |
+| **[🧩 What is n8n & Templates?](#-what-is-n8n--what-are-templates)** | A quick primer on n8n and workflow templates |
+| **[🏗️ Template Standards](#-template-folder-structure)** | Standard folder structure and quality checklist |
+| **[🗺️ Future Roadmap](#-upcoming-automation-domains)** | Planned templates across AI, Sales, DevOps, and Data |
+| **[🔒 Security & Policies](#-security--credentials)** | Credential isolation and safe sharing policies |
 
-Instead of spending days designing workflows from scratch, debugging API authentication headers, and handling edge cases, you simply **import the template, connect your credentials, and start automating in minutes**.
+---
+
+## 🧩 What is n8n & What are Templates?
+
+### What is n8n?
+* **Open-Source & Self-Hostable**: An extensible workflow automation tool with no per-execution cloud fees.
+* **API Integration Engine**: Connects native nodes, webhooks, and REST APIs with JavaScript and Python logic.
+* **Full Data Ownership**: Runs entirely on your private server, Docker container, or cloud VM.
+
+### What is an n8n Template?
+* **Pre-Built Architecture**: A standardized JSON blueprint containing all node connections, settings, and routing.
+* **Plug-and-Play**: Import the file into n8n, map your API credentials, and start executing immediately.
+* **Zero Guesswork**: Bypasses the need to design complex API payloads, retries, and error handling from scratch.
 
 ---
 
 ## 🎁 What You Get in This Repository
 
-Every template in this repository is built to **commercial-grade production standards**:
-
-* 🔒 **Zero Embedded Secrets**: All workflows strictly utilize n8n's encrypted **Credentials Manager**. No API keys, passwords, client secrets, or private server instance IDs exist inside the exported JSON files.
-* 📦 **Self-Contained Modularity**: Each template lives in its own dedicated directory with its own workflow JSON, step-by-step setup guide, external API configuration manual, and troubleshooting handbook.
-* 🛡️ **Defensive Error Handling**: Workflows include automated retry policies, fallback logic, JSON schema validation, and safe defaults (e.g., publishing as Private/Draft by default).
-* 📚 **Exhaustive Documentation**: Every template includes an architectural node-by-node audit, Mermaid execution flowcharts, Docker volume mapping instructions, and a pre-deployment sanity checklist.
-* 🚀 **Multi-Domain Scalability**: A structured, growing catalog spanning Content Creation, AI Engineering, Sales & CRM, DevOps, Data Pipelines, and Customer Operations.
+```
+┌─────────────────────────────────────────────────────────────────────────┐
+│                       PRODUCTION TEMPLATE STANDARDS                     │
+├───────────────────┬───────────────────┬─────────────────────────────────┤
+│ 🔒 Zero Secrets   │ 📦 Modular Design │ 📚 Full Documentation           │
+│ No API keys or    │ Self-contained in │ Dedicated setup, API config,    │
+│ private IDs saved │ dedicated folders │ and troubleshooting for each    │
+├───────────────────┼───────────────────┼─────────────────────────────────┤
+│ 🛡️ Error Handling │ 🔄 Safe Defaults  │ 🚀 Real-World Business Cases    │
+│ Built-in retries, │ Uploads default   │ Content pipelines, AI agents,   │
+│ checks & schemas  │ to private mode   │ lead flows, and DevOps monitors │
+└───────────────────┴───────────────────┴─────────────────────────────────┘
+```
 
 ---
 
 ## 🗂️ Template Catalog
 
-Explore our growing collection of automation blueprints. **Click on any template** to view its dedicated documentation, architecture, and installation guide:
+Click any template name to view its dedicated documentation and workflow JSON:
 
-| Category | Template Name | Key Integrations | Status | Documentation & Blueprint |
+| Domain | Template | Integrations | Status | Documentation & Blueprint |
 | :--- | :--- | :--- | :---: | :--- |
-| **Content & Social Media** | **Content Posting Automation** | Google Gemini (3.7 & 3.8 Flash), Meta Instagram Graph API, YouTube Data API v3, Cloudinary | `Production Ready` | [Explore Template](Content%20Posting%20Automation/README.md) |
-| **AI & Intelligent Agents** | *Multi-Model Research & Summarization Agent* | OpenAI, Anthropic Claude, Perplexity API, Google Drive | `In Development` | *Coming Soon* |
-| **Sales & CRM** | *Inbound Lead Enrichment & Slack Routing* | HubSpot CRM, Apollo.io, Clearbit, Slack | `In Development` | *Coming Soon* |
-| **DevOps & Cloud Ops** | *Automated Incident Response & Docker Monitor* | GitHub, Docker API, Telegram / Discord, Grafana | `Planned` | *Roadmap* |
-| **Customer Support** | *AI Ticket Triage & Zendesk Auto-Responder* | Zendesk API, Pinecone Vector DB, Gemini Vision | `Planned` | *Roadmap* |
-| **Data & Analytics** | *E-commerce ETL & Google BigQuery Sync* | Shopify API, Stripe, PostgreSQL, BigQuery | `Planned` | *Roadmap* |
-
-> 💡 **Future Expansions**: This repository is actively expanding. New templates across diverse fields of automation are regularly audited, documented, and published here. Check our [Roadmap](#-upcoming-domains--roadmap) or [CONTRIBUTING.md](CONTRIBUTING.md) to suggest a workflow.
+| 📢 **Content & Social Media** | **Content Posting Automation** | Google Gemini (3.7 & 3.8 Flash), Meta Instagram Graph API, YouTube Data API v3, Cloudinary | `Production Ready` | [Open Template Guide](Content%20Posting%20Automation/README.md) |
+| 🤖 **AI & Autonomous Agents** | *Multi-Model Research Agent* | OpenAI, Anthropic Claude, Perplexity API, Google Drive | `In Development` | *Coming Soon* |
+| 💼 **Sales, CRM & Leads** | *Inbound Lead Enrichment* | HubSpot CRM, Apollo.io, Clearbit, Slack | `In Development` | *Coming Soon* |
+| 🛠️ **DevOps & Cloud Ops** | *Docker Auto-Healing & Alerts* | Docker API, Telegram / Discord, GitHub API | `Planned` | *Roadmap* |
+| 💬 **Customer Operations** | *AI Support Ticket Triage* | Zendesk API, Vector DB, Google Gemini Vision | `Planned` | *Roadmap* |
+| 📊 **Data & E-Commerce** | *Multi-Store ETL & BigQuery Sync* | Shopify, Stripe, PostgreSQL, BigQuery | `Planned` | *Roadmap* |
 
 ---
 
-## 🚀 How to Use Any Template in 4 Steps
+## 🚀 How to Use Any Template
 
-Each template folder contains everything required to deploy the automation independently. Follow these 4 universal steps:
+Every template in this library follows the same **4-step deployment cycle**:
 
 ```
-[1. Choose a Template] ──> [2. Review Setup Guide] ──> [3. Import Workflow JSON] ──> [4. Connect Credentials & Run]
+[1. Select Template] ──> [2. Review Setup Docs] ──> [3. Import JSON] ──> [4. Connect & Run]
 ```
 
-### Step 1: Choose Your Template
-Browse the [Template Catalog](#-template-catalog) above and open the directory of the workflow you wish to use (for example, [`Content Posting Automation/`](Content%20Posting%20Automation/README.md)).
+### Step 1: Select Your Template
+* Open the template directory from the catalog (e.g., [`Content Posting Automation/`](Content%20Posting%20Automation/README.md)).
 
-### Step 2: Review the Template's Setup Guide
-Open the template's `docs/SETUP-GUIDE.md` and `docs/API-CONFIGURATION.md`. These files provide:
-* Required Docker run / compose configurations and volume mounts.
-* External API permissions, developer portal setup, and OAuth scopes.
-* Required environment variables (e.g., input folders, timezone, port settings).
+### Step 2: Review the Dedicated Documentation
+Each template folder includes a `docs/` subfolder with specific guides:
+* `docs/SETUP-GUIDE.md`: Docker configurations, volume mounts, and environment variables.
+* `docs/API-CONFIGURATION.md`: Third-party developer portal setup and permission scopes.
+* `docs/TROUBLESHOOTING.md`: Common error messages and step-by-step solutions.
 
-### Step 3: Import the Workflow JSON into n8n
-1. Open your n8n web dashboard (e.g., `http://localhost:5678`).
-2. Click **Workflows** -> **Add Workflow** -> **Import from File**.
-3. Select the sanitized workflow JSON from the template's `workflow/` folder (e.g., `Content-Posting-Automation.json`).
-4. The complete node graph will render on your n8n canvas.
+### Step 3: Import the Workflow into n8n
+1. Open your n8n web dashboard (`http://localhost:5678`).
+2. Navigate to **Workflows** -> **Add Workflow** -> **Import from File**.
+3. Select the sanitized JSON file from the template's `workflow/` folder.
 
-### Step 4: Link Your Credentials & Execute
-1. Open the n8n **Credentials Manager** and add your own API credentials for the services used in the workflow.
-2. Replace any capitalized configuration placeholders (e.g., `YOUR_ACCOUNT_ID` or `YOUR_CLOUD_NAME`).
-3. Complete the template's `docs/PRE-DEPLOYMENT-CHECKLIST.md` and trigger a test execution!
+### Step 4: Link Credentials & Run
+1. Open n8n **Credentials Manager** and create your credentials for the required services.
+2. Replace any capitalized placeholder values (e.g., `YOUR_ACCOUNT_ID`).
+3. Follow the template's `docs/PRE-DEPLOYMENT-CHECKLIST.md` and execute your first test!
 
 ---
 
-## 📂 Anatomy of Every Template Folder
+## 🏗️ Template Folder Structure
 
-To ensure consistency and ease of use, every template folder in this repository follows a standardized, modular structure:
+Every template is strictly organized using this predictable layout:
 
 ```
 Template-Name/
+├── README.md                          # Template landing page & architecture overview
+├── LICENSE                            # Template-specific license notice
+├── CHANGELOG.md                       # Release notes & version history (from v1.0.0)
+├── SECURITY.md                        # Secret sanitization guidelines
+├── .gitignore                         # Local exclusion rules (.env, test media)
 │
-├── README.md                          # Template landing page, feature matrix & summary
-├── LICENSE                            # Template license notice
-├── CHANGELOG.md                       # Versioned release notes (starting at v1.0.0)
-├── SECURITY.md                        # Template-specific security guidelines
-├── .gitignore                         # Local exclusion rules (logs, media, .env)
+├── docs/                              # Technical documentation suite
+│   ├── SETUP-GUIDE.md                 # Step-by-step installation instructions
+│   ├── API-CONFIGURATION.md           # Developer portal setup & permission scopes
+│   ├── WORKFLOW-EXPLANATION.md        # Node-by-node audit & Mermaid diagrams
+│   ├── DIRECTORY-STRUCTURE.md         # File queue & volume mapping guides
+│   ├── TROUBLESHOOTING.md             # Error diagnoses & solutions
+│   └── PRE-DEPLOYMENT-CHECKLIST.md    # Pre-launch production verification checklist
 │
-├── docs/                              # In-depth technical documentation
-│   ├── SETUP-GUIDE.md                 # Beginner installation (Docker, Windows, Linux)
-│   ├── API-CONFIGURATION.md           # External developer portals & OAuth scopes
-│   ├── WORKFLOW-EXPLANATION.md        # Node-by-node audit with Mermaid flowcharts
-│   ├── DIRECTORY-STRUCTURE.md         # File queue & volume mapping guides (if applicable)
-│   ├── TROUBLESHOOTING.md             # Error diagnoses, rate limits & solutions
-│   └── PRE-DEPLOYMENT-CHECKLIST.md    # Pre-launch sanity checklist
+├── workflow/                          # Production workflow
+│   └── Template-Name.json             # Sanitized, import-ready workflow JSON
 │
-├── workflow/
-│   └── Template-Name.json             # Production-ready, sanitized workflow JSON
-│
-└── assets/                            # Canvas captures & architecture schematics
+└── assets/                            # Visual documentation
     ├── README.md                      # Asset guidelines
-    ├── workflow-overview.png          # High-resolution canvas screenshot
+    ├── workflow-overview.png          # Full canvas screenshot
     └── setup-screenshots/             # Masked setup walkthrough captures
 ```
 
@@ -122,39 +134,40 @@ Template-Name/
 
 ## 🛠️ General Prerequisites
 
-To run any template from this repository, you will need:
+Before running any template, ensure your host environment is ready:
 
-1. **Docker & Docker Compose**: Recommended deployment method for self-hosting n8n.
-   - [Install Docker Desktop (Windows / macOS)](https://docs.docker.com/desktop/)
-   - [Install Docker Engine (Linux)](https://docs.docker.com/engine/install/)
-2. **n8n Instance (v1.x or v2.x)**: Self-hosted via Docker or deployed on a VPS / Cloud VM.
-3. **Accounts for Integrations**: Accounts with the relevant platforms used by your selected template (e.g., Google AI Studio, Meta Developer, YouTube Cloud Console, Cloudinary, Slack, etc.).
+- [x] **Docker & Docker Compose**: [Install Docker Desktop](https://docs.docker.com/desktop/) (Windows/macOS) or Docker Engine (Linux).
+- [x] **n8n Instance**: Running locally or on a cloud server (v1.x or v2.x supported).
+- [x] **Platform Accounts**: Active developer accounts for the third-party APIs used by your chosen template.
 
 ---
 
-## 🗺️ Upcoming Domains & Roadmap
+## 🗺️ Upcoming Automation Domains
 
-We are developing new templates across several automation domains:
+New templates are actively developed and documented across these categories:
 
-* **📢 Social Media & Content Marketing**: Multi-channel syndication, automated subtitle generation, podcast clipping, and newsletter syndication.
-* **🤖 Autonomous AI Workflows**: Retrieval-Augmented Generation (RAG) pipelines, multi-agent research swarms, automated document analysis, and AI voice call routing.
-* **💼 CRM, Sales & Lead Gen**: Automated LinkedIn profile enrichment, cold email sequence dispatchers, inbound webhook lead routing, and pipeline velocity monitors.
-* **🛠️ Cloud & DevOps Automation**: Docker container auto-healing, GitHub PR review bots, SSL certificate expiration monitors, and cloud cost alert dispatchers.
-* **🛒 E-commerce & Logistics**: Shopify inventory reconciliation, abandoned cart recovery sequences, and invoice extraction pipelines.
-
----
-
-## 🤝 Contributing New Templates
-
-Have an innovative, reliable n8n workflow that solves a real business problem? We welcome contributions!
-
-Please review our [CONTRIBUTING.md](CONTRIBUTING.md) guide for folder structure conventions, sanitization rules, and documentation standards before opening a Pull Request.
+* **📢 Social Media & Content**: Multi-platform clipping, transcription pipelines, and newsletter syndication.
+* **🤖 Autonomous AI Agents**: RAG knowledge bases, multi-agent research swarms, and AI document parsers.
+* **💼 CRM & Inbound Sales**: Lead scoring, email verification waterfalls, and meeting booking assistants.
+* **🛠️ Cloud & Site Reliability**: SSL renewal alerts, GitHub PR automated reviewers, and server disk monitors.
+* **🛒 E-commerce & Payments**: Abandoned cart triggers, inventory sync, and refund notifications.
 
 ---
 
-## 🔐 Security & Responsible Disclosure
+## 🔒 Security & Credentials
 
-This repository enforces strict sanitization on all published workflows. For our complete security policy, secret isolation guidelines, and responsible disclosure process, see [SECURITY.md](SECURITY.md).
+* **No Secrets in Files**: API keys, access tokens, and private server hashes are never committed to this repository.
+* **Safe Placeholders**: Identifiers are clearly marked with uppercase placeholders (e.g., `YOUR_API_KEY`).
+* **Environment Protection**: `.env` files and local media queues are ignored by root [.gitignore](.gitignore).
+* **Security Policy**: For responsible disclosure and template safety guidelines, read [SECURITY.md](SECURITY.md).
+
+---
+
+## 🤝 Contributing
+
+Contributions of tested, production-grade workflows are welcome!
+
+Please read [CONTRIBUTING.md](CONTRIBUTING.md) for quality criteria, folder naming conventions, and the pre-commit sanitization checklist.
 
 ---
 
@@ -162,6 +175,5 @@ This repository enforces strict sanitization on all published workflows. For our
 
 See [LICENSE](LICENSE) for details.
 
-> **Notice:** The repository owner must select and approve a formal software license prior to public distribution.
-#   N 8 n - A u t o m a t i o n - T e m p l a t e s  
- 
+> [!IMPORTANT]
+> The repository owner must select and approve a formal open-source or commercial license prior to public distribution.
