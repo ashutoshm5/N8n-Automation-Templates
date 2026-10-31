@@ -1,0 +1,84 @@
+# ==========================================
+# Git Ignore Configuration
+# Content Posting Automation (n8n Workflow)
+# ==========================================
+
+# Environment variables & secrets
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+*.cert
+*.crt
+*.pfx
+
+# Decrypted credentials & API exports
+*credentials*.json
+*decrypted*.json
+backup-credentials/
+secrets/
+
+# Operating System Files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+desktop.ini
+
+# Editor & IDE configurations
+.idea/
+.vscode/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# Local test media and generated content
+# (Keep media out of git to avoid repository bloat and data leaks)
+media/
+test-media/
+inputs/
+uploads/
+downloads/
+*.mp4
+*.mov
+*.avi
+*.mkv
+*.jpg
+*.jpeg
+*.png
+*.webp
+*.gif
+
+# Docker persistent local volumes (when mapped locally)
+.n8n/
+n8n_data/
+docker_data/
+
+# Logs and runtime databases
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+*.sqlite
+*.sqlite-journal
+
+# Temporary files and caches
+tmp/
+temp/
+.cache/
+
+# ==========================================
+# Explicitly Tracked Folders & Files
+# ==========================================
+!workflow/
+!workflow/Content-Posting-Automation.json
+!docs/
+!assets/

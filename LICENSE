@@ -1,0 +1,27 @@
+# License Notice and Selection Placeholder
+
+> **IMPORTANT NOTICE FOR REPOSITORY MAINTAINER / OWNER:**
+> 
+> No formal open-source or proprietary software license has been selected for this repository yet.
+> 
+> Before publishing this repository publicly on GitHub or distributing it to third parties, the repository owner must review, select, and approve an appropriate license.
+
+---
+
+### Instructions for the Repository Owner
+
+1. Choose a license that aligns with your distribution model:
+   - **MIT License**: Permissive, highly popular for workflow templates, allows anyone to use, modify, and distribute with attribution.
+   - **Apache License 2.0**: Permissive with explicit patent protection and trademark restrictions.
+   - **GNU General Public License (GPLv3)**: Copyleft license requiring derivative works to remain open-source.
+   - **Proprietary / Commercial (All Rights Reserved)**: Retains exclusive commercial rights without granting public modification or redistribution rights.
+2. Replace the contents of this file with your approved license text.
+3. Update the `License` section in the root [README.md](README.md).
+
+---
+
+```
+Copyright (c) 2026 [REPOSITORY OWNER / ORGANIZATION]
+All Rights Reserved.
+[LICENSE SELECTION REQUIRED PRIOR TO PUBLIC DISTRIBUTION]
+```

@@ -1,0 +1,961 @@
+{
+  "name": "Content Posting Automation",
+  "nodes": [
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        -1168,
+        0
+      ],
+      "id": "96da8f4c-cde2-4b6e-a4f7-6e00046a03e7",
+      "name": "When clicking ‘Execute workflow’"
+    },
+    {
+      "parameters": {
+        "fileSelector": "={{ $env.INPUT_FILES_PATH || '/path/to/your/media/*' }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.readWriteFile",
+      "typeVersion": 1.1,
+      "position": [
+        -880,
+        0
+      ],
+      "id": "d57c89a4-a8af-4e4a-b85d-0fa79be5c34b",
+      "name": "Read/Write Files from Disk"
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 4
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $binary.data.mimeType }}",
+                    "rightValue": "video/",
+                    "operator": {
+                      "type": "string",
+                      "operation": "startsWith"
+                    },
+                    "id": "aaac406e-1d24-4348-9b11-71ac435039a0"
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Video"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 4
+                },
+                "conditions": [
+                  {
+                    "id": "0190b1e8-fbbb-4b0c-ad26-ec3437fbe552",
+                    "leftValue": "={{ $binary.data.mimeType }}",
+                    "rightValue": "image/",
+                    "operator": {
+                      "type": "string",
+                      "operation": "startsWith"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Image"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.5,
+      "position": [
+        -368,
+        0
+      ],
+      "id": "e6a936ce-5de8-4a89-8ffc-b896cd016652",
+      "name": "Switch"
+    },
+    {
+      "parameters": {
+        "resource": "image",
+        "operation": "analyze",
+        "modelId": {
+          "__rl": true,
+          "value": "models/gemini-3.7-flash",
+          "mode": "list",
+          "cachedResultName": "Gemini 3.7 Flash"
+        },
+        "text": "Describe the image, identify its main subject, visible text, brand or product names, and the intended audience. Do not invent facts that cannot be verified from the image.",
+        "inputType": "binary",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.googleGemini",
+      "typeVersion": 1.2,
+      "position": [
+        -48,
+        112
+      ],
+      "id": "5a0dae28-4329-492d-b13b-c2c4f538df8d",
+      "name": "Analyze an image",
+      "retryOnFail": true,
+      "credentials": {
+        "googlePalmApi": {
+          "id": "Rf1bIPI2vzxGifEd",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "modelId": {
+          "__rl": true,
+          "value": "models/gemini-3.7-flash",
+          "mode": "list",
+          "cachedResultName": "Gemini 3.7 Flash"
+        },
+        "messages": {
+          "values": [
+            {
+              "content": "=You are the social media SEO strategist for [Your Brand], a premium technology brand.\n\nAnalyze the following image analysis and create platform-specific content.\n\nIMAGE ANALYSIS:\n{{ JSON.stringify($json) }}\n\nGenerate:\n1. Instagram: 3 captions, SEO keywords, relevant hashtags, and a CTA.\n2. LinkedIn: 3 professional captions, industry keywords, relevant hashtags, and a discussion CTA.\n3. YouTube: 3 searchable titles, 3 descriptions, relevant search keywords, video tags, and hashtags.\n\nKeep every caption factually accurate to the source. Do not invent technical specifications or claim that keywords are trending without live research.\n\nReturn valid JSON with separate instagram, linkedin, and youtube objects.\n\nReturn ONLY a valid JSON object.\nDo not use Markdown code fences.\nDo not include ```json or ``` in the response.\nThe first character must be { and the last character must be }."
+            }
+          ]
+        },
+        "jsonOutput": true,
+        "builtInTools": {},
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.googleGemini",
+      "typeVersion": 1.2,
+      "position": [
+        176,
+        112
+      ],
+      "id": "d47771e2-8ff5-409a-bed3-fb0b7ee35eb9",
+      "name": "Message a model",
+      "retryOnFail": true,
+      "waitBetweenTries": 1000,
+      "credentials": {
+        "googlePalmApi": {
+          "id": "Rf1bIPI2vzxGifEd",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resource": "file",
+        "inputType": "binary"
+      },
+      "type": "@n8n/n8n-nodes-langchain.googleGemini",
+      "typeVersion": 1.2,
+      "position": [
+        -144,
+        -96
+      ],
+      "id": "a8b4d95a-ad0d-4832-8c48-c25790134b95",
+      "name": "Upload a media file",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "Rf1bIPI2vzxGifEd",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resource": "video",
+        "operation": "analyze",
+        "modelId": {
+          "__rl": true,
+          "value": "models/gemini-3.8-flash",
+          "mode": "list",
+          "cachedResultName": "Gemini 3.8 Flash"
+        },
+        "text": "Analyze this video for social media content creation.\n\nIdentify:\n1. The main topic and key message.\n2. Important scenes, actions, and visual details.\n3. Any visible text, product names, or brands.\n4. Spoken dialogue or narration, if available.\n5. The target audience and most engaging content angle.\n6. Relevant SEO keywords.\n\nReturn a concise, factual analysis. Do not invent details that are not present in the video.",
+        "videoUrls": "={{ $json.fileUri }}",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.googleGemini",
+      "typeVersion": 1.2,
+      "position": [
+        80,
+        -96
+      ],
+      "id": "84d64d68-4ddc-4728-b348-1703c8489f0c",
+      "name": "Analyze video",
+      "retryOnFail": true,
+      "maxTries": 5,
+      "waitBetweenTries": 200,
+      "credentials": {
+        "googlePalmApi": {
+          "id": "Rf1bIPI2vzxGifEd",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "modelId": {
+          "__rl": true,
+          "value": "models/gemini-3.7-flash",
+          "mode": "list",
+          "cachedResultName": "Gemini 3.7 Flash"
+        },
+        "messages": {
+          "values": [
+            {
+              "content": "=You are a professional social media content strategist specializing in AI, technology, software, and hardware.\n\nAnalyze the following video analysis and create platform-specific content.\n\nVIDEO ANALYSIS:\n{{ JSON.stringify($json.content.parts[0].text) }}\n\nGenerate valid JSON with these keys:\n\n{\n  \"instagram\": {\n    \"caption\": \"\",\n    \"hook\": \"\",\n    \"keywords\": [],\n    \"hashtags\": [],\n    \"cta\": \"\"\n  },\n  \"linkedin\": {\n    \"caption\": \"\",\n    \"keywords\": [],\n    \"hashtags\": [],\n    \"cta\": \"\"\n  },\n  \"youtube\": {\n    \"title\": \"\",\n    \"description\": \"\",\n    \"keywords\": [],\n    \"tags\": [],\n    \"hashtags\": []\n  }\n}\n\nRequirements:\n- Instagram: engaging opening hook, concise caption, relevant hashtags.\n- LinkedIn: professional, insightful caption with a technology-focused perspective.\n- YouTube: searchable title, informative description, relevant tags.\n- Research-free accuracy: do not invent specifications, claims, or facts absent from the analysis.\n- Use relevant SEO keywords naturally.\n- Return only valid JSON, without Markdown code fences."
+            }
+          ]
+        },
+        "jsonOutput": true,
+        "builtInTools": {},
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.googleGemini",
+      "typeVersion": 1.2,
+      "position": [
+        304,
+        -96
+      ],
+      "id": "98fd6deb-6680-4023-9e69-efd0cf5b29de",
+      "name": "Message a model1",
+      "retryOnFail": true,
+      "credentials": {
+        "googlePalmApi": {
+          "id": "Rf1bIPI2vzxGifEd",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "3a6ee4f9-1e7c-490d-b833-65babb153dc8",
+              "name": "originalFilename",
+              "value": "={{ $binary.data.fileName.replace(/\\.[^/.]+$/, '') }}",
+              "type": "string"
+            }
+          ]
+        },
+        "includeOtherFields": true,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.5,
+      "position": [
+        -608,
+        0
+      ],
+      "id": "463f78ef-8c53-43a7-a823-4a19d4ab6009",
+      "name": "Edit Fields"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.cloudinary.com/v1_1/YOUR_CLOUDINARY_CLOUD_NAME/auto/upload",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpBasicAuth",
+        "sendBody": true,
+        "contentType": "multipart-form-data",
+        "bodyParameters": {
+          "parameters": [
+            {
+              "parameterType": "formBinaryData",
+              "name": "file",
+              "inputDataFieldName": "data"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.5,
+      "position": [
+        -32,
+        -304
+      ],
+      "id": "0a6ce9ce-cc65-4ade-96c1-8126fe9303b3",
+      "name": "Cloudinary - Upload Media ",
+      "credentials": {
+        "httpBasicAuth": {
+          "id": "qm978a0rncfE08er",
+          "name": "Cloudinary API"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "mode": "runOnceForEachItem",
+        "jsCode": "\nconst text = $json.content?.parts?.[0]?.text ?? $json.text;\n\nif (!text) {\n  throw new Error('Gemini response text was not found.');\n}\n\nconst result = JSON.parse(text);\n\nreturn {\n  json: {\n    originalFileName: $('Edit Fields').item.json.originalFilename,\n    instagram: result.instagram,\n    linkedin: result.linkedin,\n    youtube: result.youtube,\n    processedAt: new Date().toISOString()\n  }\n};\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        544,
+        112
+      ],
+      "id": "6d3dfc4a-1c87-4174-8055-fe3ffaa6a455",
+      "name": "Result Enhancer"
+    },
+    {
+      "parameters": {
+        "jsCode": "\nconst raw =\n  $json.content?.parts?.[0]?.text ??\n  $json.text ??\n  $json.output ??\n  $json.response;\n\nif (!raw) {\n  throw new Error('Gemini response text was not found.');\n}\n\nconst cleaned = String(raw)\n  .replace(/^```(?:json)?\\s*/i, '')\n  .replace(/\\s*```$/, '')\n  .trim();\n\nlet result;\n\ntry {\n  result = JSON.parse(cleaned);\n} catch (error) {\n  throw new Error(\n    'Gemini returned invalid JSON: ' + cleaned.slice(0, 500)\n  );\n}\n\nfor (const platform of ['instagram', 'linkedin', 'youtube']) {\n  if (!result[platform]) {\n    throw new Error(`Missing ${platform} content.`);\n  }\n}\n\nreturn {\n  json: {\n    originalFileName: $('Edit Fields').item.json.originalFilename,\n    instagram: result.instagram,\n    linkedin: result.linkedin,\n    youtube: result.youtube,\n    processedAt: new Date().toISOString()\n  }\n};\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        624,
+        -112
+      ],
+      "id": "9a1eadd2-c277-4acb-9cba-c5cd77a90be6",
+      "name": "Result Enhancer1"
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 4
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.resource_type }}",
+                    "rightValue": "video",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    },
+                    "id": "aaac406e-1d24-4348-9b11-71ac435039a0"
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Video"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 4
+                },
+                "conditions": [
+                  {
+                    "id": "0190b1e8-fbbb-4b0c-ad26-ec3437fbe552",
+                    "leftValue": "={{ $json.resource_type }}",
+                    "rightValue": "image",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Image"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.5,
+      "position": [
+        448,
+        -304
+      ],
+      "id": "f82956d9-d02c-4b4f-8d60-a89fefe296f8",
+      "name": "Switch1"
+    },
+    {
+      "parameters": {
+        "mode": "combine",
+        "advanced": true,
+        "mergeByFields": {
+          "values": [
+            {
+              "field1": "original_filename",
+              "field2": "originalFileName"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        992,
+        -96
+      ],
+      "id": "5ac4bbfa-bc52-49b5-8f3b-e67ab9ab6c87",
+      "name": "Video Merge"
+    },
+    {
+      "parameters": {
+        "mode": "combine",
+        "advanced": true,
+        "mergeByFields": {
+          "values": [
+            {
+              "field1": "original_filename",
+              "field2": "originalFileName"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        992,
+        96
+      ],
+      "id": "cbd7d764-0c29-4fff-8a9c-528cdfc020a7",
+      "name": "Image Merge"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://graph.facebook.com/v26.0/YOUR_INSTAGRAM_ACCOUNT_ID/media",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": []
+        },
+        "sendBody": true,
+        "contentType": "form-urlencoded",
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "video_url",
+              "value": "={{ $json.secure_url }}"
+            },
+            {
+              "name": "caption",
+              "value": "={{\n  [\n    Array.isArray($json.instagram.captions)\n      ? $json.instagram.captions.join('\\n\\n')\n      : $json.instagram.caption,\n\n    $json.instagram.cta,\n\n    Array.isArray($json.instagram.seo_keywords)\n      ? $json.instagram.seo_keywords.join(' · ')\n      : $json.instagram.seo_keywords,\n\n    Array.isArray($json.instagram.hashtags)\n      ? $json.instagram.hashtags.join(' ')\n      : $json.instagram.hashtags\n  ]\n  .filter(value => value && String(value).trim())\n  .join('\\n\\n')\n}}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.5,
+      "position": [
+        1328,
+        -96
+      ],
+      "id": "55964088-3df1-4fea-8aa3-8714ba71f824",
+      "name": "Video Content Merge",
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "Bq2QvgdBGSDRvMd8",
+          "name": "Meta Instagram API"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://graph.facebook.com/v26.0/YOUR_INSTAGRAM_ACCOUNT_ID/media",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": []
+        },
+        "sendBody": true,
+        "contentType": "form-urlencoded",
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "image_url",
+              "value": "={{ $json.secure_url }}"
+            },
+            {
+              "name": "caption",
+              "value": "={{\n  [\n    Array.isArray($json.instagram.captions)\n      ? $json.instagram.captions.join('\\n\\n')\n      : $json.instagram.caption,\n\n    $json.instagram.cta,\n\n    Array.isArray($json.instagram.seo_keywords)\n      ? $json.instagram.seo_keywords.join(' · ')\n      : $json.instagram.seo_keywords,\n\n    Array.isArray($json.instagram.hashtags)\n      ? $json.instagram.hashtags.join(' ')\n      : $json.instagram.hashtags\n  ]\n  .filter(value => value && String(value).trim())\n  .join('\\n\\n')\n}}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.5,
+      "position": [
+        1328,
+        96
+      ],
+      "id": "58c9b5f0-b69c-4d29-9c21-3414bc750b06",
+      "name": "Image Content Merge",
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "Bq2QvgdBGSDRvMd8",
+          "name": "Meta Instagram API"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://graph.facebook.com/v26.0/YOUR_INSTAGRAM_ACCOUNT_ID/media_publish",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": []
+        },
+        "sendBody": true,
+        "contentType": "form-urlencoded",
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "creation_id",
+              "value": "={{ $json.id }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.5,
+      "position": [
+        1568,
+        -96
+      ],
+      "id": "405cf88a-9649-4956-9886-f40105004fb0",
+      "name": "Instagram Reel Post ",
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "Bq2QvgdBGSDRvMd8",
+          "name": "Meta Instagram API"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://graph.facebook.com/v26.0/YOUR_INSTAGRAM_ACCOUNT_ID/media_publish",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": []
+        },
+        "sendBody": true,
+        "contentType": "form-urlencoded",
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "creation_id",
+              "value": "={{ $json.id }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.5,
+      "position": [
+        1568,
+        96
+      ],
+      "id": "66934075-ad60-4434-9bad-1c5967164361",
+      "name": "Instagram Image Post ",
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "Bq2QvgdBGSDRvMd8",
+          "name": "Meta Instagram API"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resource": "video",
+        "operation": "upload",
+        "title": "={{ $json.youtube.title }}",
+        "regionCode": "IN",
+        "categoryId": "={{ \"28\" }}",
+        "options": {
+          "description": "={{ $json.youtube.description + '\\n\\n' + $json.youtube.hashtags.join(' ') }}",
+          "privacyStatus": "private",
+          "tags": "={{ $json.youtube.tags.join(', ') }}"
+        }
+      },
+      "type": "n8n-nodes-base.youTube",
+      "typeVersion": 1,
+      "position": [
+        1568,
+        288
+      ],
+      "id": "5067151c-80bc-41d4-88ec-684d2fa882db",
+      "name": "Upload a video",
+      "credentials": {
+        "youTubeOAuth2Api": {
+          "id": "Iapc243jR2NxdV2U",
+          "name": "YouTube account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 4
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $binary.data.mimeType }}",
+                    "rightValue": "video/",
+                    "operator": {
+                      "type": "string",
+                      "operation": "startsWith"
+                    },
+                    "id": "aaac406e-1d24-4348-9b11-71ac435039a0"
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Video"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 4
+                },
+                "conditions": [
+                  {
+                    "id": "0190b1e8-fbbb-4b0c-ad26-ec3437fbe552",
+                    "leftValue": "={{ $binary.data.mimeType }}",
+                    "rightValue": "image/",
+                    "operator": {
+                      "type": "string",
+                      "operation": "startsWith"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Image"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.5,
+      "position": [
+        -352,
+        320
+      ],
+      "id": "dc2990a3-e732-4ea1-9e99-f1bf8e18aa74",
+      "name": "Switch3"
+    },
+    {
+      "parameters": {
+        "mode": "combine",
+        "combineBy": "combineByPosition",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        992,
+        288
+      ],
+      "id": "0b8587bf-924a-4a3b-b472-b5e8fda2839c",
+      "name": "Video Merge1"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "When clicking ‘Execute workflow’": {
+      "main": [
+        [
+          {
+            "node": "Read/Write Files from Disk",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Read/Write Files from Disk": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Switch3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Switch": {
+      "main": [
+        [
+          {
+            "node": "Upload a media file",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Analyze an image",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Analyze an image": {
+      "main": [
+        [
+          {
+            "node": "Message a model",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Message a model": {
+      "main": [
+        [
+          {
+            "node": "Result Enhancer",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Upload a media file": {
+      "main": [
+        [
+          {
+            "node": "Analyze video",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Analyze video": {
+      "main": [
+        [
+          {
+            "node": "Message a model1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Message a model1": {
+      "main": [
+        [
+          {
+            "node": "Result Enhancer1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields": {
+      "main": [
+        [
+          {
+            "node": "Cloudinary - Upload Media ",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Switch",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Result Enhancer": {
+      "main": [
+        [
+          {
+            "node": "Image Merge",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "Result Enhancer1": {
+      "main": [
+        [
+          {
+            "node": "Video Merge",
+            "type": "main",
+            "index": 1
+          },
+          {
+            "node": "Video Merge1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Cloudinary - Upload Media ": {
+      "main": [
+        [
+          {
+            "node": "Switch1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Switch1": {
+      "main": [
+        [
+          {
+            "node": "Video Merge",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Image Merge",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Image Merge": {
+      "main": [
+        [
+          {
+            "node": "Image Content Merge",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Video Merge": {
+      "main": [
+        [
+          {
+            "node": "Video Content Merge",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Video Content Merge": {
+      "main": [
+        [
+          {
+            "node": "Instagram Reel Post ",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Image Content Merge": {
+      "main": [
+        [
+          {
+            "node": "Instagram Image Post ",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Switch3": {
+      "main": [
+        [
+          {
+            "node": "Video Merge1",
+            "type": "main",
+            "index": 1
+          }
+        ],
+        []
+      ]
+    },
+    "Video Merge1": {
+      "main": [
+        [
+          {
+            "node": "Upload a video",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate"
+  },
+  "versionId": "1b327d0f-3d9c-4509-b38c-67d3b5cc43d5",
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "nodeGroups": [],
+  "tags": []
+}
